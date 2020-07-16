@@ -1,0 +1,52 @@
+
+/*重置密码start*/
+	.resetPassword-icon{ width: 18px; height: 18px; background-image: url(../images/login/resetPassword-icon.png); background-size: 18px 18px; background-repeat: no-repeat; margin-top: 13px; }
+	.resetPassword-content{ position: relative; padding:44px 10px 0px 10px!important; }
+	.resetPassword-frist-input{ width: 100%; margin-top: 20px; height: 44px!important; font-size: 13px; color: #333; text-indent: 25px; margin-bottom: 10px!important; border:1px solid #e3e3e3!important;}
+	.resetPassword-frist-span{ font-size: 12px; color: #1655bf; position: absolute; top: 77px; left: 20px; }
+	.resetPassword-second-input{ width: 100%; padding: 10px 10px!important; height: 44px!important; font-size: 12px; color: #333; margin-bottom: 10px!important; border:1px solid #e3e3e3!important;}
+	.resetPassword-frist-btn {font-size: 12px; height: 42px; width: auto; padding:0px 7px!important;background: #1655bf; color: white; position: absolute; right: 11px; top: 119px;border: none; border-top-left-radius: 0px; border-bottom-left-radius: 0px; }
+	.resetPassword-last-btn{ width: 100%; height: 44px!important; background: #1655bf; color: white; margin-top: 30px; border: none; }
+/*重置密码end*/
+
+/*会员特权start*/
+	.member-privilege .mui-bar-nav~.mui-content{ padding-bottom: 50px; }
+	.member-privilege .mui-bar-nav{ box-shadow: 0 1px 6px #ccc; }
+	.member-privilege-top{ width: 100%;padding: 20px 30px 30px 30px; font-size: 15px; background-color: #1655bf; color: #FFFFFF; }
+	.member-privilege-top .photo{ width: 48px; height: 48px;border-radius: 100%; background-size: contain; display: inline-block; }
+	.member-privilege-top .sPhone{ vertical-align: 18px; padding-left: 10px; }
+	.member-privilege-top .myPrivilege{ width: 100%; height: auto;font-size: 12px;padding-left: 25px;display: inline-block;}
+	.member-privilege-contain{ width: 100%; padding: 0 10px; }
+	.member-privilege-title{ color: #666666; font-size: 15px; padding-left: 20px; margin-bottom: 0px; line-height: 40px; font-weight: 600; }
+	.member-privilege-title.growUp{ background: url(../images/member/member-privilege-grow.png) no-repeat 0px 11px; background-size: 16px 16px; }
+	.member-privilege-title.exclusive{ background: url(../images/member/member-privilege-exclusive.png) no-repeat 0px 11px; background-size: 16px 16px; }
+	.member-privilege .col3{ width: 33.33333333%; }
+	.member-privilege .col2{ width: 50%; }
+	.member-privilege .col37{ width: 31%; }
+	.member-privilege .col73{ width: 69%; }
+	.member-privilege .tLeft{ text-align: left!important; }
+	.member-privilege .tdetail{ text-align: left!important; padding: 10px 5px 15px 10px; line-height: 20px!important; }
+	.member-privilege .tdetail p:last-child{ margin-top: 20px; }
+	.member-privilege-grow,.member-privilege-exclusive {display: table; width: 100%; border-collapse: collapse;background-color: #FFFFFF;}
+	.member-privilege-grow * {margin: 0 auto; padding: 0;}
+	.member-privilege .privilege-tr { display: table-row; height: 35px; line-height: 35px; }
+	.member-privilege .privilege-th { display: table-cell; font-weight: bold; font-size: 13px; color: #666; height: 100%; text-align: center; vertical-align: middle; }
+	.member-privilege .privilege-td {display: table-cell; height: 100%;text-align: center;vertical-align: middle;color: #999999;font-size: 12px;}
+	.member-privilege .sub-table {width: 100%;height: 100%;display: table;border-collapse: collapse;}
+	.member-privilege .sub-table-tr {display: table-row; height: 100%;}
+	.member-privilege .sub-table-td { display: table-cell; height: 100%; border-left: 1px solid #efefef; border-right: 1px solid #efefef; border-top: 1px solid #efefef; text-align: center; vertical-align: middle; }
+	.member-privilege-exclusive .sub-table-td:nth-child(2){ font-size: 12px; color: #999; font-weight: normal; line-height: 20px; padding: 10px; text-align: left; }
+	.member-privilege .mui-table-view-cell>a:not(.mui-btn){ white-space: initial!important; text-overflow: initial!important; }
+	.member-privilege .mui-grid-view.mui-grid-9 .mui-table-view-cell{ padding: 10px 0 30px 0!important; border: 0!important; }
+	.member-privilege .mui-grid-view.mui-grid-9 .mui-table-view-cell.mui-active{background-color: transparent;}
+	.member-privilege .mui-grid-view.mui-grid-9{ background-color: #FFFFFF; border: 0; padding: 0 10px; }
+	.member-privilege .mui-media-body{ font-size: 12px!important; color: #999!important; overflow: initial!important; height: auto!important; }
+	.member-privilege .mui-slider-indicator{ bottom: 0; height: 30px; }
+	.member-privilege .mui-slider-indicator .mui-indicator{ width: 4px; height: 4px;}
+	.member-privilege .mui-slider-indicator .mui-active.mui-indicator{background: #1655bf;box-shadow: 0 0 1px 1px rgba(25,85,191,.5); }
+	.member-privilege .mui-slider .mui-slider-group .mui-slider-item img{ width: 50%; height: auto; }
+	.member-privilege .mui-table-view-cell>a:not(.mui-btn).hd-privilege{white-space: nowrap!important; margin-left: -1px;}
+	.member-privilege .myPrivilege-bgk{ display: block; height: 20px; line-height: 20px; position: absolute; left: 10px; margin-top: -12px;padding-right:10px;border-radius: 20px;background: #2eb4fa;}
+	.member-privilege .myPrivilege-bgk img{width:auto;height: 22px;display: inline-block;    position: absolute;margin-top: -1px;}
+/*会员特权end*/
+

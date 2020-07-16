@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:cache="http://www.springframework.org/schema/cache" xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+    http://www.springframework.org/schema/cache  http://www.springframework.org/schema/cache/spring-cache.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+    http://www.springframework.org/schema/util  http://www.springframework.org/schema/util/spring-util.xsd">
+
+	
+	<aop:aspectj-autoproxy />
+	<context:property-placeholder ignore-unresolvable="true" location="classpath*:weixinConfig.properties"/>
+	<!-- 自动扫描dao和service包(自动注入) -->
+	<context:component-scan base-package="cn.com.biz.*.dao.*" />
+	<context:component-scan base-package="cn.com.biz.*.service.*"/>
+    <!-- 自动扫描包 ,将带有注解的类 纳入spring容器管理 -->
+	<context:component-scan base-package="com.biz.bizunited">
+	    <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />  
+    </context:component-scan>
+    <!-- 引入配置文件 -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:bizunited.properties</value>
+                <value>classpath*:redis.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+     <!-- 数据源集合 -->
+	<bean id="dataSource" class="org.jeecgframework.minidao.datasource.DynamicDataSource">
+		<property name="targetDataSources">
+			<map key-type="org.jeecgframework.minidao.datasource.DataSourceType">
+				<entry key="druid_datasource" value-ref="druid_datasource" />
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="druid_datasource" />
+	</bean>
+    
+	<!-- Hibernate sessionFactory 配置 -->
+	<bean id="sqlSessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<!-- <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop> -->
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.temp.use_jdbc_metadata_defaults">false</prop>
+			</props>
+		</property>
+		<!-- 注解方式配置 -->
+		<property name="packagesToScan">
+			<list>
+				<value>com.biz.bizunited.*</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- JDBC配置 -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+	</bean>
+
+	<!-- JDBC 占位符配置 -->
+	<bean id="namedParameterJdbcTemplate"
+		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg ref="dataSource" />
+	</bean>
+	
+	<!-- 配置事物管理器，在*ServiceImpl里写@Transactional就可以启用事物管理 -->
+	<bean name="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sqlSessionFactory"></property>
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- 事务管理 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="create*" propagation="REQUIRED" />
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<!-- <tx:method name="*" read-only="true" /> -->
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config proxy-target-class="true">
+		<aop:advisor advice-ref="txAdvice"
+			pointcut="execution(* com.biz.bizunited..service..*.*(..))" />
+	</aop:config>
+
+	<!-- MiniDao扫描类 -->
+	<bean class="org.jeecgframework.minidao.factory.MiniDaoBeanScannerConfigurer">
+		<!-- 是使用什么字母做关键字Map的关键字 默认值origin 即和sql保持一致,lower小写(推荐),upper 大写 -->
+		<property name="keyType" value="origin"></property>
+		<!-- 格式化sql -->
+		<property name="formatSql" value="true"></property>
+		<!-- 输出sql -->
+		<property name="showSql" value="true"></property>
+		<!-- 数据库类型 -->
+		<property name="dbType" value="mysql"></property>
+		<!-- dao地址,配置符合spring方式 -->
+		<property name="basePackage" value="com.biz.bizunited"></property>
+		<!-- 使用的注解,默认是Minidao,推荐 Repository -->
+		<!-- <property name="annotation" value="org.springframework.stereotype.Repository"></property> -->
+	</bean>
+	
+	<task:annotation-driven />
+	
+ 	<!--Spring Session 相关配置-->
+    <bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"/>
+    <bean id="redisPoolConfig" class="redis.clients.jedis.JedisPoolConfig" />
+    <bean id="redisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="hostName" value="${redis.ip}" />
+        <property name="port" value="${redis.port}" />
+        <property name="password" value="${redis.password}"/>
+        <property name="poolConfig" ref="redisPoolConfig"></property>
+    </bean>
+    <util:constant
+            static-field="org.springframework.session.data.redis.config.ConfigureRedisAction.NO_OP"/>
+            
+</beans>

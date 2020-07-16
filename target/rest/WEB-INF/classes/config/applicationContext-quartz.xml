@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd 
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd 
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+     
+     <!-- 数据同步 -->
+     <bean id="transferTask" class="com.biz.bizunited.task.DataTransferTask"></bean>
+     
+     <bean id="transferJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+     	<property name="targetObject" ref="transferTask"/>
+     	<property name="targetMethod" value="transferCashGiftData"/>
+     	<property name="concurrent" value="false"/> 
+     </bean>
+     
+     <bean id="transferTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+     	<property name="jobDetail" ref="transferJob"/>
+     	<property name="cronExpression" value="0 0/30 * * * ? "/>
+     </bean>
+     <!-- 回收未发出奖 -->
+     <bean id="recyclingTask" class="com.biz.bizunited.task.RecyclingPrizeTask"></bean>
+     
+     <bean id="recyclingJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+     	<property name="targetObject" ref="recyclingTask"/>
+     	<property name="targetMethod" value="RecyclingPrize"/>
+     	<property name="concurrent" value="false"/> 
+     </bean>
+     <bean id="recyclingTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+     	<property name="jobDetail" ref="recyclingJob"/>
+     	<property name="cronExpression" value="0 0 3 * * ? "/>
+     </bean>
+     
+     <!-- 检查更新微信用户关注状态
+     <bean id="updateSubscribeJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+     	<property name="targetObject" ref="weiXinUserServiceImpl"/>
+     	<property name="targetMethod" value="updateSubscribe"/>
+     	<property name="concurrent" value="false"/> 
+     </bean>
+     <bean id="updateSubscribeTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+     	<property name="jobDetail" ref="updateSubscribeJob"/>
+     	<property name="cronExpression" value="0 0/5 * * * ? "/>
+     </bean>
+      -->
+     <bean id="threadPool" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="queueCapacity" value="200" />
+        <property name="corePoolSize" value="5" />
+        <property name="maxPoolSize" value="100" />
+        <property name="keepAliveSeconds" value="300" />
+     </bean>
+     <bean id="updateSubscribeTask" class="com.biz.bizunited.task.UpdateSubscribeTask" >
+        <property name="threadPool" ref="threadPool" />
+    </bean>
+     <bean id="updateSubscribeJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+     	<property name="targetObject" ref="updateSubscribeTask"/>
+     	<property name="targetMethod" value="updateSubscribe"/>
+     	<property name="concurrent" value="false"/> 
+     </bean>
+     <bean id="updateSubscribeTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+     	<property name="jobDetail" ref="updateSubscribeJob"/>
+     	<property name="cronExpression" value="0 30 01 * * ? "/>
+     </bean>
+     
+     
+     <bean id="SchedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+     	<property name="triggers">
+     		<list>
+     			<ref bean="transferTrigger"/>
+     			<ref bean="recyclingTrigger"/>
+     			<ref bean="updateSubscribeTrigger"/>
+     		</list>
+     	</property>
+     </bean>
+     
+</beans>
