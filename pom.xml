@@ -16,7 +16,7 @@
 		<codelogger.utils.version>1.0.0</codelogger.utils.version>
 		<slf4j.version>1.7.7</slf4j.version>
 		<logback.version>1.1.6</logback.version>
-		<log4j2.version>2.6.2</log4j2.version>
+		<log4j2.version>2.13.3</log4j2.version>
 		<commons-logging>1.1.1</commons-logging>
 		<poi.version>3.9</poi.version>
 		<easypoi.version>2.1.4</easypoi.version>
