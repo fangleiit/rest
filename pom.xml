@@ -25,7 +25,7 @@
 		<hibernate.version>4.1.0.Final</hibernate.version>
 		<hibernate-common-annotations.version>4.0.2.Final</hibernate-common-annotations.version>
 		<hibernate-jpa.version>1.0.1.Final</hibernate-jpa.version>
-		<groovy.version>2.3.3</groovy.version>
+		<groovy.version>2.4.21</groovy.version>
 		<gson.version>2.2.4</gson.version>
 		<jodd.version>3.3.7</jodd.version>
 		<pinyin4j.version>2.5.0</pinyin4j.version>
